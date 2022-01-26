@@ -1,0 +1,11 @@
+{
+    "name": "@rturtu/ckeditor5-oembed",
+    "version": "1.0.16",
+    "description": "CKEditor5 plugin implementing the oembed protocol",
+    "main": "index.js",
+    "author": "Razvan Turturica",
+    "license": "MIT",
+    "dependencies": {
+        "match-url-wildcard": "^0.0.4"
+    }
+}
