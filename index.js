@@ -82,7 +82,7 @@ class CKEditor5Oembed extends Plugin {
                         });
                     })
                     .catch((err) => {
-                        console.err(err);
+                        console.error(err);
                     });
             });
 
