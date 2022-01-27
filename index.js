@@ -45,7 +45,7 @@ class CKEditor5Oembed extends Plugin {
             } catch (_) {
                 return false;
             }
-            return url.protocol === "http:" || url.protocol === "https:";
+            return urlObj.protocol === "http:" || urlObj.protocol === "https:";
         };
 
         const editor = this.editor;
@@ -59,13 +59,19 @@ class CKEditor5Oembed extends Plugin {
                 tooltip: true,
             });
 
-            // Callback executed once the image is clicked.
+            // Callback executed once the toolbar item is clicked.
             view.on("execute", () => {
                 const mediaUrl = prompt("Media URL");
                 if (!isUrl(mediaUrl) && mediaUrl.startsWith(`<iframe`)) {
                     addToEditor(mediaUrl);
                     return;
+                } else if (isUrl(mediaUrl)) {
+                    addToEditor(`<a href="${mediaUrl}">${mediaUrl}</a>`);
+                    return;
+                } else {
+                    return;
                 }
+                /*
                 const providerEndpoint = getProviderEndpoint(mediaUrl);
                 if (!providerEndpoint) {
                     return;
@@ -84,6 +90,7 @@ class CKEditor5Oembed extends Plugin {
                     .catch((err) => {
                         console.error(err);
                     });
+                    */
             });
 
             return view;
