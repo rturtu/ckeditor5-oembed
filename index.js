@@ -92,7 +92,7 @@ class CKEditor5Oembed extends Plugin {
                             addUrlToEditor(mediaUrl);
                         });
                 } else {
-                    addUrlToEditor(mediaUrl);
+                    addToEditor(mediaUrl);
                 }
             });
 
