@@ -42,6 +42,11 @@ class CKEditor5Oembed extends Plugin {
                 );
             });
         };
+
+        const addUrlToEditor = (url) => {
+            addToEditor(`<a target="_blank" href="${url}">${url}</a>`);
+        };
+
         const isUrl = (url) => {
             let urlObj;
             try {
@@ -71,18 +76,23 @@ class CKEditor5Oembed extends Plugin {
                     addToEditor(mediaUrl);
                     return;
                 } else if (isUrl(mediaUrl)) {
-                    addToEditor(`<a href="${mediaUrl}">${mediaUrl}</a>`);
                     fetch(`/api/OEmbed/GetUrl?url=${mediaUrl}`)
                         .then((response) => response.text())
                         .then((response) => {
-                            const jsonResponse = JSON.parse(response);
-                            if (jsonResponse.html)
-                                addToEditor(jsonResponse.html);
+                            try {
+                                const jsonResponse = JSON.parse(response);
+                                if (jsonResponse && jsonResponse.html)
+                                    addToEditor(jsonResponse.html);
+                                else addUrlToEditor(mediaUrl);
+                            } catch (e) {
+                                addUrlToEditor(mediaUrl);
+                            }
                         })
-                        .catch((err) => {});
-                    return;
+                        .catch((err) => {
+                            addUrlToEditor(mediaUrl);
+                        });
                 } else {
-                    return;
+                    addUrlToEditor(mediaUrl);
                 }
             });
 
