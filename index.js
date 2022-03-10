@@ -70,7 +70,7 @@ class CKEditor5Oembed extends Plugin {
 
             // Callback executed once the toolbar item is clicked.
             view.on("execute", () => {
-                const mediaUrl = prompt("Media URL");
+                const mediaUrl = prompt("Media URL").trim();
                 if (!mediaUrl) return;
                 if (!isUrl(mediaUrl) && mediaUrl.startsWith(`<iframe`)) {
                     addToEditor(mediaUrl);
