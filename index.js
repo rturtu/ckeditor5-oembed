@@ -1,8 +1,10 @@
 import imageIcon from "./desktop-svgrepo-com.svg";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
+/*
 import oembedProviders from "./providers";
 import matchUrl from "match-url-wildcard";
+*/
 
 class CKEditor5Oembed extends Plugin {
     static get pluginName() {
@@ -10,6 +12,7 @@ class CKEditor5Oembed extends Plugin {
     }
 
     init() {
+        /*
         const getProviderEndpoint = (mediaUrl) => {
             const provider = oembedProviders.find((provider) =>
                 provider.endpoints.some((endpoint) =>
@@ -28,6 +31,7 @@ class CKEditor5Oembed extends Plugin {
                 return url.slice(0, url.length - 9);
             } else return url;
         };
+        */
         const addToEditor = (content) => {
             editor.model.change((writer) => {
                 const responseView = editor.data.processor.toView(content);
@@ -68,30 +72,18 @@ class CKEditor5Oembed extends Plugin {
                     return;
                 } else if (isUrl(mediaUrl)) {
                     addToEditor(`<a href="${mediaUrl}">${mediaUrl}</a>`);
+                    fetch(`/api/OEmbed/GetUrl?url=${mediaUrl}`)
+                        .then((response) => response.text())
+                        .then((response) => {
+                            const jsonResponse = JSON.parse(response);
+                            if (jsonResponse.html)
+                                addToEditor(jsonResponse.html);
+                        })
+                        .catch((err) => {});
                     return;
                 } else {
                     return;
                 }
-                /*
-                const providerEndpoint = getProviderEndpoint(mediaUrl);
-                if (!providerEndpoint) {
-                    return;
-                }
-                const provider = removeDotFormatFromUrl(providerEndpoint.url);
-
-                fetch(
-                    `/oembed/?provider=${provider}&url=${mediaUrl}&format=json`
-                )
-                    .then((r) => {
-                        r.text().then((res) => {
-                            const jsonResponse = JSON.parse(res);
-                            addToEditor(jsonResponse.html);
-                        });
-                    })
-                    .catch((err) => {
-                        console.error(err);
-                    });
-                    */
             });
 
             return view;
