@@ -58,6 +58,7 @@ class CKEditor5Oembed extends Plugin {
         };
 
         const editor = this.editor;
+        editor.config.define("oembedOrigin", "");
 
         editor.ui.componentFactory.add("oembedUrl", (locale) => {
             const view = new ButtonView(locale);
@@ -76,7 +77,8 @@ class CKEditor5Oembed extends Plugin {
                     addToEditor(mediaUrl);
                     return;
                 } else if (isUrl(mediaUrl)) {
-                    fetch(`/api/OEmbed/GetUrl?url=${mediaUrl}`)
+                    const oembedOrigin = editor.config.get("oembedOrigin");
+                    fetch(`${oembedOrigin}/api/OEmbed/GetUrl?url=${mediaUrl}`)
                         .then((response) => response.text())
                         .then((response) => {
                             try {
